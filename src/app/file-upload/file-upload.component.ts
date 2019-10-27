@@ -14,6 +14,7 @@ export class FileUploadComponent {
  
   fileurl;
   task: AngularFireUploadTask;
+  uploadFile=false;
 
   // Progress monitoring
   percentage: Observable<number>;
@@ -24,6 +25,7 @@ export class FileUploadComponent {
   // State for dropzone CSS toggling
   isHovering: boolean;
 
+  defaultImage= "https://x.kinja-static.com/assets/images/logos/placeholders/default.png";
   constructor(private storage: AngularFireStorage, private db: AngularFirestore) { }
 
   
@@ -35,6 +37,7 @@ export class FileUploadComponent {
 
   startUpload(event: FileList) {
     // The File object
+    this.uploadFile=true;
     const file = event.item(0)
     // console.log(file);
 
@@ -59,18 +62,16 @@ export class FileUploadComponent {
  
   
     this.snapshot   = this.task.snapshotChanges().pipe(
-  
-      // The file's download URL
-      
-      // finalize(() => ),
-      finalize(() => this.downloadURL = fileRef.getDownloadURL() ),
+
+      finalize(
+        () => {
+          this.downloadURL = fileRef.getDownloadURL(),
+          this.uploadFile=false
+        }
+      ),
       tap(snap => {
         
         if (snap.bytesTransferred === snap.totalBytes) {
-          // Update firestore on completion
-          // snap.ref.getDownloadURL().then(function(downloadURL) {
-          //   console.log("File available at", downloadURL);
-          // });
           this.db.collection('files').add( { path, size: snap.totalBytes })
         }
       }),
