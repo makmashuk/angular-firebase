@@ -7,10 +7,16 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { DropZoneDirective } from './drop-zone.directive';
+import { FileUploadComponent } from './file-upload/file-upload.component';
+import { FileSizePipe } from './file-size.pipe';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DropZoneDirective,
+    FileUploadComponent,
+    FileSizePipe
   ],
   imports: [
     BrowserModule,
